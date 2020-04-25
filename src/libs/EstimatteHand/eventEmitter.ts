@@ -1,46 +1,8 @@
-import * as handtrack from "@tensorflow-models/handpose";
-import { HandPose } from "@tensorflow-models/handpose";
 import { EventEmitter } from "events";
-import { ITypedEventEmitter } from "./TypedEventEmitter";
 import { Observable } from "rxjs";
 
-type V3 = [number, number, number];
-
-export class HandEstimator {
-  private video: HTMLVideoElement;
-  private model: HandPose;
-  private eventEmitter: TypedEventEmitter;
-
-  private updateTime: number = 1000;
-
-  constructor(video: HTMLVideoElement, options?: { updateTime: number }) {
-    this.video = video;
-    if (options) {
-      options.updateTime = this.updateTime = options.updateTime;
-    }
-    this.eventEmitter = new TypedEventEmitter();
-  }
-
-  public async init() {
-    this.model = await handtrack.load();
-    this.eventEmitter.emit(HandEstimatorEvent.LOAD, null);
-    setInterval(this.eventLoop, this.updateTime);
-  }
-
-  public getEventEmitter = () => this.eventEmitter;
-
-  eventLoop = async () => {
-    const [hand] = (await this.model.estimateHands(this.video)) as any;
-
-    if (!hand) return;
-    const indexFinger = hand.annotations.indexFinger as V3[];
-
-    // console.log(indexFinger);
-    this.eventEmitter.emit(HandEstimatorEvent.UPDATE, {
-      indexFingerPoint: indexFinger[3],
-    });
-  };
-}
+import { ITypedEventEmitter } from "../TypedEventEmitter";
+import { V3 } from "../../types/math";
 
 export enum HandEstimatorEvent {
   LOAD = "load",

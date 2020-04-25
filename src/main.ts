@@ -1,6 +1,8 @@
-import { FaceEstimator, FaceEstimatorEvent } from "./libs/estimateFace";
-import { HandEstimator, HandEstimatorEvent } from "./libs/estimatteHand";
+import { FaceEstimator } from "./libs/EstimateFace";
+import { HandEstimator } from "./libs/EstimatteHand";
 import { extrapolation2dPoints } from "./libs/math/extrapolation";
+import { FaceEstimatorEvent } from "./libs/EstimateFace/eventEmitter";
+import { HandEstimatorEvent } from "./libs/EstimatteHand/eventEmitter";
 
 async function runFaceWebInterface(video: HTMLVideoElement) {
   const estimator = new FaceEstimator(video, { updateTime: 1000 });
@@ -25,20 +27,20 @@ async function runHandWebInterface(video: HTMLVideoElement) {
 
   const fakeCursor = document.querySelector("#fakeCursor") as any;
 
-  const extr = extrapolation2dPoints(5);
+  const extrapolation = extrapolation2dPoints(5);
 
   estimator
     .getEventEmitter()
     .createObserver(HandEstimatorEvent.UPDATE)
     .subscribe((payload) => {
-      const point = extr(
+      // const point = {
+      //   x: payload.indexFingerPoint[0],
+      //   y: payload.indexFingerPoint[1],
+      // };
+      const point = extrapolation(
         payload.indexFingerPoint[0],
         payload.indexFingerPoint[1]
       );
-
-      console.debug("payload.indexFingerPoint", ...payload.indexFingerPoint);
-      console.debug("point", point);
-
       if (!point) return;
 
       const widthCoef = window.outerWidth / video.videoWidth;
