@@ -13,7 +13,7 @@ export class HandEstimator {
 
   private updateTime: number = 1000;
 
-  constructor (video: HTMLVideoElement, options?: { updateTime: number }) {
+  constructor(video: HTMLVideoElement, options?: { updateTime: number }) {
     this.video = video;
     if (options) {
       options.updateTime = this.updateTime = options.updateTime;
@@ -21,7 +21,7 @@ export class HandEstimator {
     this.eventEmitter = new TypedEventEmitter();
   }
 
-  public async init () {
+  public async init() {
     this.model = await handtrack.load();
     this.eventEmitter.emit(HandEstimatorEvent.LOAD, null);
     setInterval(this.eventLoop, this.updateTime);
@@ -30,17 +30,16 @@ export class HandEstimator {
   public getEventEmitter = () => this.eventEmitter;
 
   eventLoop = async () => {
-    const [ hand ]  = await this.model.estimateHands(this.video) as any;
+    const [hand] = (await this.model.estimateHands(this.video)) as any;
 
     if (!hand) return;
     const indexFinger = hand.annotations.indexFinger as V3[];
 
     // console.log(indexFinger);
     this.eventEmitter.emit(HandEstimatorEvent.UPDATE, {
-      indexFingerPoint: indexFinger[3]
+      indexFingerPoint: indexFinger[3],
     });
-  }
-
+  };
 }
 
 export enum HandEstimatorEvent {
@@ -55,7 +54,7 @@ export interface IUpdateInfo {
 export interface HandEstimatorEventsMap {
   [HandEstimatorEvent.LOAD]: any;
   [HandEstimatorEvent.UPDATE]: {
-    indexFingerPoint: V3
+    indexFingerPoint: V3;
   };
 }
 
@@ -69,29 +68,31 @@ export class TypedEventEmitter implements ITypedEventEmitter {
 
   emit = <TYPE extends HandEstimatorEvent>(
     type: TYPE,
-    payload: HandEstimatorEventsMap[TYPE],
+    payload: HandEstimatorEventsMap[TYPE]
   ) => {
     this.eventEmitter.emit(type, payload);
   };
 
   removeListener<TYPE extends HandEstimatorEvent>(
     event: TYPE,
-    handler: (payload: HandEstimatorEventsMap[TYPE]) => void,
+    handler: (payload: HandEstimatorEventsMap[TYPE]) => void
   ) {
     this.eventEmitter.removeListener(event, handler);
   }
 
   public on<TYPE extends HandEstimatorEvent>(
     type: TYPE,
-    handler: (payload: HandEstimatorEventsMap[TYPE]) => void,
+    handler: (payload: HandEstimatorEventsMap[TYPE]) => void
   ) {
     this.eventEmitter.addListener(type, handler);
   }
 
-  public createObserver <TYPE extends HandEstimatorEvent>(type: TYPE): Observable<HandEstimatorEventsMap[TYPE]> {
+  public createObserver<TYPE extends HandEstimatorEvent>(
+    type: TYPE
+  ): Observable<HandEstimatorEventsMap[TYPE]> {
     const that = this;
     return new Observable<HandEstimatorEventsMap[TYPE]>((observer) => {
-      this.on(type, data => observer.next(data))
+      this.on(type, (data) => observer.next(data));
     });
   }
 }

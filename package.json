@@ -26,6 +26,7 @@
         "@tensorflow-models/handpose": "0.0.3",
         "@tensorflow/tfjs-node": "^1.7.3",
         "@tensorflow/tfjs-node-gpu": "^1.7.3",
+        "prettier": "^2.0.5",
         "rxjs": "^6.5.5"
     }
 }
