@@ -25,7 +25,7 @@ async function runHandWebInterface(video: HTMLVideoElement) {
   const estimator = new HandEstimator(video, { updateTime: 100 });
   await estimator.init();
 
-  const fakeCursor = document.querySelector("#fakeCursor") as any;
+  const fakeCursor = document.querySelector("#fake-cursor") as any;
 
   const extrapolation = extrapolation2dPoints(5);
 
@@ -33,10 +33,6 @@ async function runHandWebInterface(video: HTMLVideoElement) {
     .getEventEmitter()
     .createObserver(HandEstimatorEvent.UPDATE)
     .subscribe((payload) => {
-      // const point = {
-      //   x: payload.indexFingerPoint[0],
-      //   y: payload.indexFingerPoint[1],
-      // };
       const point = extrapolation(
         payload.indexFingerPoint[0],
         payload.indexFingerPoint[1]
