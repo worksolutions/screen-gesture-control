@@ -2,8 +2,9 @@ import * as handtrack from "@tensorflow-models/handpose";
 import { HandPose } from "@tensorflow-models/handpose";
 
 import { HandEstimatorEvent, TypedEventEmitter } from "./eventEmitter";
-import { understandGesture } from "./gestureUnderstanding";
-import { V3 } from "../../types/math";
+import { understandGesture } from "./features/gestureUnderstanding";
+
+import { V3 } from "../types/math";
 
 export class HandEstimator {
   private readonly video: HTMLVideoElement;

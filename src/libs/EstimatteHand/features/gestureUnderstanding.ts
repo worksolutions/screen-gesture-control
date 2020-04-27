@@ -1,5 +1,6 @@
 import { V3 } from "../../types/math";
-import { distance3D } from "../math/distance";
+
+import { distance3D } from "../../math/distance";
 
 export enum Gesture {
   POINT = "point",
@@ -17,9 +18,6 @@ interface HandInterface {
 function isPoint(hand: HandInterface): boolean {
   const lengthIndex = distance3D(hand.palmBase[0], hand.indexFinger[3]);
   const lengthMiddle = distance3D(hand.palmBase[0], hand.middleFinger[3]);
-
-  console.log("lengthIndex", lengthIndex);
-  console.log("lengthMiddle", lengthMiddle);
   return lengthIndex / lengthMiddle > 1.5;
 }
 

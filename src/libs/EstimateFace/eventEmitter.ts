@@ -46,7 +46,7 @@ export class TypedEventEmitter implements ITypedEventEmitter {
     this.eventEmitter.addListener(type, handler);
   }
 
-  public createObserver<TYPE extends FaceEstimatorEvent>(
+  public createObserverOn<TYPE extends FaceEstimatorEvent>(
     type: TYPE
   ): Observable<FaceEstimatorEventsMap[TYPE]> {
     return new Observable<FaceEstimatorEventsMap[TYPE]>((observer) =>

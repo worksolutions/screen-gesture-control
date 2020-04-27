@@ -1,4 +1,4 @@
-import { V3 } from "../../types/math";
+import { V3 } from "../types/math";
 
 export const distance3D = (a: V3, b: V3) =>
   Math.sqrt(

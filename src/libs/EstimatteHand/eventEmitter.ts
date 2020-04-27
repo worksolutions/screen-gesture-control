@@ -2,15 +2,11 @@ import { EventEmitter } from "events";
 import { Observable } from "rxjs";
 
 import { ITypedEventEmitter } from "../TypedEventEmitter";
-import { V3 } from "../../types/math";
+import { V3 } from "../types/math";
 
 export enum HandEstimatorEvent {
   LOAD = "load",
   UPDATE = "update",
-}
-
-export interface IUpdateInfo {
-  headPitch: number;
 }
 
 export interface HandEstimatorEventsMap {
@@ -49,10 +45,9 @@ export class TypedEventEmitter implements ITypedEventEmitter {
     this.eventEmitter.addListener(type, handler);
   }
 
-  public createObserver<TYPE extends HandEstimatorEvent>(
+  public createObserverOn<TYPE extends HandEstimatorEvent>(
     type: TYPE
   ): Observable<HandEstimatorEventsMap[TYPE]> {
-    const that = this;
     return new Observable<HandEstimatorEventsMap[TYPE]>((observer) => {
       this.on(type, (data) => observer.next(data));
     });
