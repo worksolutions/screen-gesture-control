@@ -3,16 +3,21 @@ import { Observable } from "rxjs";
 
 import { ITypedEventEmitter } from "../TypedEventEmitter";
 import { V3 } from "../types/math";
+import { Gesture } from "./features/gestureUnderstanding";
 
 export enum HandEstimatorEvent {
   LOAD = "load",
   UPDATE = "update",
+  GESTURE_UPDATE = "gesture_update",
 }
 
 export interface HandEstimatorEventsMap {
   [HandEstimatorEvent.LOAD]: any;
   [HandEstimatorEvent.UPDATE]: {
     indexFingerPoint: V3;
+  };
+  [HandEstimatorEvent.GESTURE_UPDATE]: {
+    gestureType: Gesture;
   };
 }
 

@@ -33,8 +33,9 @@ export class HandEstimator {
     const [hand] = (await this.model.estimateHands(this.video)) as any;
     if (!hand) return;
 
-    const gesture = understandGesture(hand.annotations);
-    console.log("gesture", gesture);
+    this.eventEmitter.emit(HandEstimatorEvent.GESTURE_UPDATE, {
+      gestureType: understandGesture(hand.annotations),
+    });
 
     const indexFinger = hand.annotations.indexFinger as V3[];
     this.eventEmitter.emit(HandEstimatorEvent.UPDATE, {

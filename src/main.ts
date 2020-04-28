@@ -29,7 +29,7 @@ async function runFaceWebInterface(video: HTMLVideoElement) {
 }
 
 async function runHandWebInterface(video: HTMLVideoElement) {
-  const estimator = new HandEstimator(video, { updateTime: 200 });
+  const estimator = new HandEstimator(video, { updateTime: 100 });
   await estimator.init();
 
   const cursor = new HandCursor();
@@ -52,6 +52,14 @@ async function runHandWebInterface(video: HTMLVideoElement) {
       }))
     )
     .subscribe((point: Position2D) => cursor.move(point));
+
+  const gestureContainer = document.querySelector("#gesture");
+  estimator
+    .getEventEmitter()
+    .createObserverOn(HandEstimatorEvent.GESTURE_UPDATE)
+    .subscribe((gesture) => {
+      gestureContainer.innerHTML = gesture.gestureType;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
