@@ -1,6 +1,6 @@
 import { Position2D } from "../types/math";
 
-export const extrapolation2dPoints = (window: number) => {
+export const interpolation2dPoints = (window: number) => {
   let store: [number, number][] = [];
   return function (x: number, y: number): Position2D | null {
     store.push([x, y]);

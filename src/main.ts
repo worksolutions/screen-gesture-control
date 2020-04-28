@@ -6,7 +6,7 @@ import { HandEstimator } from "./libs/EstimatteHand";
 import { HandEstimatorEvent } from "./libs/EstimatteHand/eventEmitter";
 import { HandCursor } from "./libs/EstimatteHand/features/handCursor";
 
-import { extrapolation2dPoints } from "./libs/math/extrapolation";
+import { interpolation2dPoints } from "./libs/math/extrapolation";
 
 import { Position2D } from "./libs/types/math";
 
@@ -33,14 +33,14 @@ async function runHandWebInterface(video: HTMLVideoElement) {
   await estimator.init();
 
   const cursor = new HandCursor();
-  const extrapolation = extrapolation2dPoints(5);
+  const interpolation = interpolation2dPoints(5);
 
   estimator
     .getEventEmitter()
     .createObserverOn(HandEstimatorEvent.UPDATE)
     .pipe(
       map((handEvent) =>
-        extrapolation(
+        interpolation(
           handEvent.indexFingerPoint[0],
           handEvent.indexFingerPoint[1]
         )
